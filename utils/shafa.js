@@ -1,4 +1,4 @@
-const cheerio = require("cheerio");
+import cheerio from "cheerio";
 
 async function fetchJsonLdFromUrl(url) {
   const res = await fetch(url);
@@ -24,6 +24,3 @@ async function fetchShafaData(url) {
 
   return { name, image, description, color, price };
 }
-
-
-fetchShafaData(url).then(console.log);
