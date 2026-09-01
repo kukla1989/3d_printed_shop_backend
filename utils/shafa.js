@@ -1,9 +1,9 @@
-import cheerio from "cheerio";
+import { load } from "cheerio";
 
 async function fetchJsonLdFromUrl(url) {
   const res = await fetch(url);
   const html = await res.text();
-  const $ = cheerio.load(html);
+  const $ = load(html);
 
   return $('script[type="application/ld+json"]')
     .map((_, script) => {
@@ -16,7 +16,7 @@ async function fetchJsonLdFromUrl(url) {
     .get();
 }
 
-async function fetchShafaData(url) {
+export async function fetchShafaData(url) {
   const data = await fetchJsonLdFromUrl(url)
 
   const { name, image, description, color } = data[0]
