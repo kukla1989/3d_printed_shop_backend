@@ -56,6 +56,30 @@ export default {
 			}
 		}
 
+		// GET /products/:id
+		if (request.method === 'GET') {
+			const match = url.pathname.match(/^\/products\/(\d+)$/);
+			if (match) {
+				const id = Number(match[1]);
+				try {
+					const row = await env.db
+						.prepare('SELECT id, name, price, description, color, shafa_link, created_at FROM products WHERE id = ?')
+						.bind(id)
+						.first();
+
+					if (!row) {
+						return Response.json({ error: 'Product not found' }, { status: 404, headers: corsHeaders });
+					}
+
+					return Response.json( row , { headers: corsHeaders });
+				} catch (error) {
+					console.error('Error fetching product:', error);
+					const message = error instanceof Error ? error.message : String(error);
+					return Response.json({ error: 'Failed to fetch product', details: message }, { status: 500, headers: corsHeaders });
+				}
+			}
+		}
+
 		return new Response('Not found', { status: 404, headers: corsHeaders });
 	}
 };
